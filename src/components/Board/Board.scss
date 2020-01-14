@@ -1,0 +1,12 @@
+.board {
+    margin: 10px;
+
+    &-title {
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 10px;
+    }
+
+    &-users-title {
+        padding: 10px 0;
+    }
+}
