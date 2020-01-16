@@ -4,8 +4,41 @@ import { Toolbar, Button } from "@material-ui/core";
 
 import "./Header.scss";
 
-const LoggedOutView = props => {
-  if (!props.currentUser) {
+@inject('userStore', 'commonStore', 'authStore')
+@observer
+class Header extends React.Component {
+  constructor(props) {
+    super();
+
+    this.logout = this.logout.bind(this);
+  }
+
+  logout() {
+    this.props.authStore.logout();
+  }
+
+  render() {
+    const { userStore } = this.props;
+
+    if (userStore.currentUser || localStorage.getItem('token')) {
+      return (
+        <Toolbar>
+          <div className="wrapper">
+            <h1>
+              Trello Project <small>(2.0.1)</small>
+            </h1>
+            <Button
+              onClick={this.logout}
+              variant="contained"
+              color="primary"
+            >
+              Logout
+            </Button>
+          </div>
+        </Toolbar>
+      );
+    }
+
     return (
       <Toolbar>
         <div className="wrapper">
@@ -14,38 +47,6 @@ const LoggedOutView = props => {
           </h1>
         </div>
       </Toolbar>
-    );
-  }
-  return null;
-}
-
-const LoggedInView = props => {
-  if (props.currentUser) {
-    return (
-      <Toolbar>
-        <div className="wrapper">
-          <h1>
-            Trello Project <small>(2.0.1)</small>
-          </h1>
-          <Button variant="contained" color="primary">
-            Logout
-          </Button>
-        </div>
-      </Toolbar>
-    );
-  }
-  return null;
-}
-
-@inject('userStore', 'commonStore')
-@observer
-class Header extends React.Component {
-  render() {
-    return (
-      <>
-        <LoggedOutView currentUser={this.props.userStore.currentUser} />
-        <LoggedInView currentUser={this.props.userStore.currentUser} />
-      </>
     );
   }
 };

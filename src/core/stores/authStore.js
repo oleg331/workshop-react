@@ -34,9 +34,12 @@ class AuthStore {
   @action login() {
     this.inProgress = true;
     this.errors = undefined;
-    return agent.Auth.login(this.values.email, this.values.password)
-      .then(({ user }) => commonStore.setToken(user.token))
-      .then(() => userStore.pullUser())
+    return agent.auth.login(this.values)
+      .then(({ data }) => {
+        commonStore.setToken(data.token);
+        return data.user;
+      })
+      .then(user => userStore.pullUser(user))
       .catch(
         action(err => {
           this.errors =
@@ -54,13 +57,12 @@ class AuthStore {
   @action register() {
     this.inProgress = true;
     this.errors = undefined;
-    return agent.Auth.register(
-      this.values.username,
-      this.values.email,
-      this.values.password
-    )
-      .then(({ user }) => commonStore.setToken(user.token))
-      .then(() => userStore.pullUser())
+    return agent.auth.register(this.values)
+      .then(({ data }) => {
+        commonStore.setToken(data.token);
+        return data.user;
+      })
+      .then(user => userStore.pullUser(user))
       .catch(
         action(err => {
           this.errors =

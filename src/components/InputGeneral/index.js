@@ -7,10 +7,13 @@ import {
   Grid
 } from "@material-ui/core";
 
-export default observer(({ field, type = "text", placeholder = null }) => (
+export default observer(field => (
   <Grid item xs={12}>
     <InputLabel htmlFor={field.id}>{field.label}</InputLabel>
-    <Input {...field.bind({ type, placeholder })} />
+    <Input
+      {...field.bind({ type: field.type })}
+      value={field.value}
+    />
     <FormHelperText>{field.error}</FormHelperText>
   </Grid>
 ));

@@ -7,9 +7,8 @@ import { inject, observer } from 'mobx-react';
 class PrivateRoute extends React.Component {
     render() {
         const { userStore, ...restProps } = this.props;
-        if (localStorage.getItem("token")) return <Route {...restProps} />;
-        // if (userStore.currentUser) return <Route {...restProps} />;
-        return <Redirect to="/" />;
+        if (localStorage.getItem('token')) return <Route {...restProps} />;
+        return <Redirect to="/auth" />;
     }
 }
 

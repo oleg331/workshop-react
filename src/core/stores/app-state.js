@@ -17,6 +17,7 @@ export default class AppState {
     return new Promise((resolve, reject) => {
       this.authenticating = true;
       setTimeout(() => {
+        
         this.authenticated = !this.authenticated;
         this.authenticating = false;
         resolve(this.authenticated);

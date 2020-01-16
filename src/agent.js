@@ -8,8 +8,6 @@ const superagent = superagentPromise(_superagent, global.Promise);
 
 const API_ROOT = APIUrl;
 
-const encode = encodeURIComponent;
-
 const handleErrors = err => {
   if (err && err.response && err.response.status === 401) {
     authStore.logout();
@@ -58,62 +56,28 @@ const requests = {
 };
 
 const auth = {
-  current: () => requests.get("/user"),
   login: userInfo =>
-    requests.postWithoutToken("/auth/signin", { body: userInfo }),
+    requests.postWithoutToken("/auth/signin", {
+      email: userInfo.email,
+      password: userInfo.password
+    }),
   register: userInfo =>
-    requests.postWithoutToken("/auth/signup", { body: userInfo }),
-  save: user => requests.put("/user", { user })
+    requests.postWithoutToken("/auth/signup", userInfo)
 };
 
 const boards = {
   getAll: () => requests.get("/boards")
 };
 
-const tags = {
-  getAll: () => requests.get("/tags")
-};
-
-const limit = (count, p) => `limit=${count}&offset=${p ? p * count : 0}`;
-const omitSlug = article => Object.assign({}, article, { slug: undefined });
-
-const articles = {
-  all: (page, lim = 10) => requests.get(`/articles?${limit(lim, page)}`),
-  byAuthor: (author, page, query) =>
-    requests.get(`/articles?author=${encode(author)}&${limit(5, page)}`),
-  byTag: (tag, page, lim = 10) =>
-    requests.get(`/articles?tag=${encode(tag)}&${limit(lim, page)}`),
-  del: slug => requests.del(`/articles/${slug}`),
-  favorite: slug => requests.post(`/articles/${slug}/favorite`),
-  favoritedBy: (author, page) =>
-    requests.get(`/articles?favorited=${encode(author)}&${limit(5, page)}`),
-  feed: () => requests.get("/articles/feed?limit=10&offset=0"),
-  get: slug => requests.get(`/articles/${slug}`),
-  unfavorite: slug => requests.del(`/articles/${slug}/favorite`),
-  update: article =>
-    requests.put(`/articles/${article.slug}`, { article: omitSlug(article) }),
-  create: article => requests.post("/articles", { article })
-};
-
 const comments = {
   create: (slug, comment) =>
     requests.post(`/articles/${slug}/comments`, { comment }),
   delete: (slug, commentId) =>
-    requests.del(`/articles/${slug}/comments/${commentId}`),
-  forArticle: slug => requests.get(`/articles/${slug}/comments`)
-};
-
-const profile = {
-  follow: username => requests.post(`/profiles/${username}/follow`),
-  get: username => requests.get(`/profiles/${username}`),
-  unfollow: username => requests.del(`/profiles/${username}/follow`)
+    requests.del(`/articles/${slug}/comments/${commentId}`)
 };
 
 export default {
-  articles,
   auth,
   boards,
   comments,
-  profile,
-  tags
 };

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Card, CardContent, Typography, CardActions, Button } from "@material-ui/core";
 
 import "./Board.scss";
