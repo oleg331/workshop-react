@@ -13,12 +13,6 @@ class AuthForm extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     this.props.formStore.onSubmit(e);
-
-    // const { loginFormStore, authStore } = this.props;
-
-    // authStore.setEmail(loginFormStore.values().email);
-    // authStore.setPassword(loginFormStore.values().password);
-    // authStore.login();
   }
 
   render() {
