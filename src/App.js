@@ -1,6 +1,7 @@
 import React from "react";
-import { Route, withRouter } from "react-router-dom";
+import { Route } from "react-router-dom";
 import { inject, observer } from "mobx-react";
+import { LinearProgress } from "@material-ui/core";
 
 import pages from "./pages";
 
@@ -10,7 +11,6 @@ import Header from "./components/Header/Header";
 import "./App.css";
 
 @inject("userStore", "commonStore")
-@withRouter
 @observer
 class App extends React.Component {
   componentWillMount() {
@@ -19,17 +19,10 @@ class App extends React.Component {
     }
   }
 
-  componentDidMount() {
-    // if (this.props.commonStore.token) {
-    //   this.props.userStore
-    //     .pullUser()
-    //     .finally(() => this.props.commonStore.setAppLoaded());
-    // }
-  }
-
   render() {
     return (
       <>
+        {this.props.commonStore.isLoading && <LinearProgress />}
         <Header />
         {pages.map(page =>
           page.name === "Auth" ? (

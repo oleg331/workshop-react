@@ -1,6 +1,4 @@
-import React from "react";
-
-const BoardDetail = () => <div>Board detail Module</div>;
+import BoardDetail from "./BoardDetail";
 
 export default {
   routeProps: {

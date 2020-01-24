@@ -1,17 +1,38 @@
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
 
 import "./Dashboard.scss";
 import BoardsList from '../../components/BoardsList/BoardsList';
+import ModalAction from '../../core/components/ModalAction';
 
 @inject("boardsStore", "commonStore", "userStore")
-@withRouter
 @observer
 class Dashboard extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      btnBoardAddOptions: {
+        buttonText: "Add board",
+        variant: "outlined",
+        color: "primary"
+      }
+    }
+
+    this.handleAddBoard = this.handleAddBoard.bind(this);
+  }
+
+  handleAddBoard(e) {
+    e.preventDefault();
+
+    this.setState({
+      boardAddOpened: true
+    })
+  }
+
   componentDidMount() {
-    this.props.boardsStore.loadBoards()
+    this.props.boardsStore.loadBoards();
   }
 
   render() {
@@ -19,13 +40,24 @@ class Dashboard extends React.Component {
       boards,
       isLoadingBoards
     } = this.props.boardsStore;
+
+    const { btnBoardAddOptions } = this.state;
+
     return (
-      <div className="wrapper-dashboard">
+      <>
+      <div className="add-board-container">
+        <ModalAction
+          type="board"
+          title="Add board"
+          btnOptions={btnBoardAddOptions}
+        />
+      </div>
+
         <BoardsList
           boards={boards}
           loading={isLoadingBoards}
         />
-      </div>
+      </>
     )
   }
 };

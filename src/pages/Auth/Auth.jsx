@@ -57,7 +57,7 @@ class Auth extends React.Component {
 
     return (
       <div className="auth-container">
-        <AppBar position="static" color="default">
+        <AppBar position="static" color="default" className="auth-tabs">
           <Tabs
             value={value}
             onChange={this.handleChangeTab}
@@ -74,7 +74,7 @@ class Auth extends React.Component {
             <AuthForm formStore={loginFormStore} />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <AuthForm formStore={registerFormStore} />
+            <AuthForm formStore={registerFormStore} changeTabIndex={this.handleChangeTabIndex} />
           </TabPanel>
         </SwipeableViews>
       </div>

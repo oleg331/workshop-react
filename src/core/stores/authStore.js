@@ -1,4 +1,4 @@
-import { observable, action } from "mobx";
+import { observable, action, computed } from "mobx";
 import agent from "../../agent";
 import userStore from "./userStore";
 import commonStore from "./commonStore";
@@ -29,6 +29,11 @@ class AuthStore {
     this.values.username = "";
     this.values.email = "";
     this.values.password = "";
+    localStorage.removeItem('user');
+  }
+
+  @action setUser(user) {
+    localStorage.setItem('user', JSON.stringify(user));
   }
 
   @action login() {
@@ -37,6 +42,7 @@ class AuthStore {
     return agent.auth.login(this.values)
       .then(({ data }) => {
         commonStore.setToken(data.token);
+        this.setUser(data.user);
         return data.user;
       })
       .then(user => userStore.pullUser(user))
@@ -47,7 +53,7 @@ class AuthStore {
           throw err;
         })
       )
-      .finally(
+      .then(
         action(() => {
           this.inProgress = false;
         })
@@ -58,18 +64,6 @@ class AuthStore {
     this.inProgress = true;
     this.errors = undefined;
     return agent.auth.register(this.values)
-      .then(({ data }) => {
-        commonStore.setToken(data.token);
-        return data.user;
-      })
-      .then(user => userStore.pullUser(user))
-      .catch(
-        action(err => {
-          this.errors =
-            err.response && err.response.body && err.response.body.errors;
-          throw err;
-        })
-      )
       .finally(
         action(() => {
           this.inProgress = false;
@@ -80,6 +74,7 @@ class AuthStore {
   @action logout() {
     commonStore.setToken(null);
     userStore.forgetUser();
+    this.reset();
     return Promise.resolve();
   }
 }

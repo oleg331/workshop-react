@@ -1,4 +1,10 @@
-.auth-container {
-  width: 500px;
-  margin: 100px auto;
+.auth {
+  &-container {
+    width: 500px;
+    margin: 100px auto;
+  }
+
+  &-tabs {
+    margin-bottom: 20px;
+  }
 }

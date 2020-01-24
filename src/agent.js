@@ -24,9 +24,10 @@ const tokenPlugin = req => {
 };
 
 const requests = {
-  del: url =>
+  del: (url, body) =>
     superagent
       .del(`${API_ROOT}${url}`)
+      .send(body)
       .use(tokenPlugin)
       .end(handleErrors)
       .then(responseBody),
@@ -52,6 +53,12 @@ const requests = {
     superagent
       .post(`${API_ROOT}${url}`, body)
       .end(handleErrors)
+      .then(responseBody),
+  patch: (url, body) =>
+    superagent
+      .patch(`${API_ROOT}${url}`, body)
+      .use(tokenPlugin)
+      .end(handleErrors)
       .then(responseBody)
 };
 
@@ -61,23 +68,45 @@ const auth = {
       email: userInfo.email,
       password: userInfo.password
     }),
-  register: userInfo =>
-    requests.postWithoutToken("/auth/signup", userInfo)
+  register: userInfo => requests.postWithoutToken("/auth/signup", userInfo)
 };
 
 const boards = {
-  getAll: () => requests.get("/boards")
+  getAll: () => requests.get("/boards"),
+  get: boardId => requests.get(`/boards/${boardId}`),
+  create: title => requests.post("/boards", { title }),
+  update: (boardId, body) => requests.put(`/boards/${boardId}`, body),
+  delete: boardId => requests.del(`/boards/${boardId}`)
+};
+
+const columns = {
+  add: (id, body) => requests.post(`/columns/${id}`, body),
+  delete: id => requests.del(`/columns/${id}`),
+  update: (id, body) => requests.put(`/columns/${id}`, body)
+};
+
+const tasks = {
+  add: (id, body) => requests.post(`/tasks/${id}`, body),
+  delete: id => requests.del(`/tasks/${id}`),
+  update: (id, body) => requests.put(`/tasks/${id}`, body)
+};
+
+const users = {
+  getAll: () => requests.get(`/users`),
+  toggleOnBoard: (boardId, body) => requests.patch(`/boards/${boardId}`, body),
+  toggleOnTask: (taskId, body) => requests.patch(`/tasks/${taskId}`, body)
 };
 
 const comments = {
-  create: (slug, comment) =>
-    requests.post(`/articles/${slug}/comments`, { comment }),
-  delete: (slug, commentId) =>
-    requests.del(`/articles/${slug}/comments/${commentId}`)
+  create: (taskId, body) => requests.post(`/comments/${taskId}`, body),
+  delete: (commentId, body) => requests.del(`/comments/${commentId}`, body)
 };
 
 export default {
   auth,
   boards,
-  comments,
+  columns,
+  tasks,
+  users,
+  comments
 };

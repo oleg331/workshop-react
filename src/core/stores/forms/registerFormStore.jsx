@@ -2,8 +2,6 @@ import { Form } from 'mobx-react-form';
 import dvr from 'mobx-react-form/lib/validators/DVR';
 import validatorjs from 'validatorjs';
 
-import authStore from '../authStore';
-
 class RegisterFormStore extends Form {
 
   plugins() {
@@ -14,7 +12,7 @@ class RegisterFormStore extends Form {
 
   setup() {
     return {
-      formName: "Register",
+      formName: "register",
       fields: [
         {
           name: "username",
@@ -42,11 +40,7 @@ class RegisterFormStore extends Form {
   hooks() {
     return {
       onSuccess(form) {
-        authStore.setUsername(form.values().username);
-        authStore.setEmail(form.values().email);
-        authStore.setPassword(form.values().password);
-
-        authStore.register();
+        console.log("Form valid", form.values());
       },
       onError(form) {
         console.log("All form errors", form.errors());

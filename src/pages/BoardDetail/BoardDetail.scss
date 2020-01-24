@@ -1,0 +1,14 @@
+.board-detail {
+    &-container {
+        padding: 0 20px;
+    }
+
+    &-header {
+        display: flex;
+        align-items: center;
+
+        & > * {
+            margin-right: 10px;
+        }
+    }
+}

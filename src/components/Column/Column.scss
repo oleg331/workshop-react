@@ -1,0 +1,17 @@
+.column {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 10px;
+    border: 1px solid #e0e0e0;
+    box-sizing: border-box;
+
+    &-title {
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 10px;
+    }
+
+    &-actions {
+        display: flex;
+        align-items: center;
+    }
+}

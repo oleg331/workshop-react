@@ -5,8 +5,7 @@ class CommonStore {
   @observable token = window.localStorage.getItem("token");
   @observable appLoaded = false;
 
-  @observable tags = [];
-  @observable isLoadingTags = false;
+  @observable isLoading = false;
 
 
   constructor() {

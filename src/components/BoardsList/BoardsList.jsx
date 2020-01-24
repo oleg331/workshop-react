@@ -2,14 +2,21 @@
 import React from 'react';
 
 import Board from '../Board/Board';
-import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import { CircularProgress, Grid } from '@material-ui/core';
 
 import "./BoardsList.scss";
 
 const BoardsList = props => {
   if (props.loading && props.boards.length === 0) {
     return (
-      <LoadingSpinner />
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+      >
+        <CircularProgress />
+      </Grid>
     );
   }
 
@@ -22,13 +29,13 @@ const BoardsList = props => {
   }
 
   return (
-    <>
+    <div className="wrapper-dashboard">
       {props.boards.map(board => {
         return (
           <Board board={board} key={board._id} />
         )
       })}
-    </>
+    </div>
   )
 };
 

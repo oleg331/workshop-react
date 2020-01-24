@@ -1,20 +1,26 @@
 import ReactDOM from "react-dom";
 import React from "react";
-import { HashRouter } from "react-router-dom";
+import { Router } from "react-router";
 import { Provider } from "mobx-react";
+import { createBrowserHistory } from "history";
+import { RouterStore, syncHistoryWithStore } from "mobx-react-router";
 
 import App from "./App";
-
 import stores from "./core/stores";
+
+const browserHistory = createBrowserHistory();
+const routingStore = new RouterStore();
+
+const history = syncHistoryWithStore(browserHistory, routingStore);
 
 // For debugging
 window._____APP_STATE_____ = stores;
 
 ReactDOM.render(
   <Provider {...stores}>
-    <HashRouter>
+    <Router history={history}>
       <App />
-    </HashRouter>
+    </Router>
   </Provider>,
   document.getElementById("root")
 );

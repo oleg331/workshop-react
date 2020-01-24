@@ -3,9 +3,19 @@ import { Card, CardContent, Typography, CardActions, Button } from "@material-ui
 
 import "./Board.scss";
 import UsersList from "../UsersList/UsersList";
+import { Link } from "react-router-dom";
+import boardsStore from "../../core/stores/boardsStore";
 
 const Board = props => {
-  const { title, users, } = props.board;
+  const { _id, title, users, } = props.board;
+
+  const deleteBoard = async (e) => {
+    e.preventDefault();
+
+    await boardsStore.deleteBoard(_id);
+    await boardsStore.loadBoards();
+  }
+
   return (
     <Card className="board">
       <CardContent>
@@ -13,19 +23,15 @@ const Board = props => {
           {title}
         </Typography>
 
-        <Typography className="board-users-title" gutterButton variant="h6" component="h4">
-          Users:
-        </Typography>
-
         <UsersList
           users={users}
         />
       </CardContent>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button component={Link} to={`/board/${_id}`} size="small" color="primary">
           View
         </Button>
-        <Button size="small" color="primary">
+        <Button onClick={deleteBoard} size="small" color="primary">
           Delete
         </Button>
       </CardActions>
